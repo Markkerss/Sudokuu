@@ -4,10 +4,12 @@ import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { FancyAlert } from 'react-native-expo-fancy-alerts'
 import {setQuestionBoard} from '../store/setBoard'
+import CountDown from 'react-native-countdown-component';
 
 export default function Game({ route, navigation }) {
   const [editableBoard, setEditableBoard] = useState([])
   const [visible, setVisible] = useState(false)
+  const [visibleFail, setVisibleFail] = useState(false)
   const dispatch = useDispatch()
 
   const { questionBoard } = useSelector(state => state.boardReducer)
@@ -15,6 +17,10 @@ export default function Game({ route, navigation }) {
   const toggleAlert = useCallback(() => {
     setVisible(!visible);
   }, [visible]);
+
+  const toggleAlertFail = useCallback(() => {
+    setVisibleFail(!visibleFail);
+  }, [visibleFail]);
 
   const {difficulty, name} = route.params
   useEffect(() => {
@@ -76,21 +82,25 @@ export default function Game({ route, navigation }) {
           toggleAlert()
           console.log(visible)
         }
-        // SweetAlert.showAlertWithOptions({
-        //   title: response.status,
-        //   confirmButtonTitle: 'OK',
-        //   confirmButtonColor: '#000',
-        //   otherButtonTitle: 'Cancel',
-        //   otherButtonColor: '#dedede',
-        //   style: 'success',
-        //   cancellable: true
-        // })
       })
       .catch(console.warn)
   }
+
+  console.log(visibleFail)
   return (
       <View style={styles.container}>
         <Text style={styles.title}>Sudoku!</Text>
+        <CountDown
+          until={0 + 15}
+          size={30}
+          onFinish={() => toggleAlertFail()}
+          digitStyle={{backgroundColor: 'white', borderWidth: 2, borderColor: 'powderblue'}}
+          digitTxtStyle={{color: 'lightblue'}}
+          separatorStyle={{color: 'powderblue'}}
+          timeToShow={['M', 'S']}
+          timeLabels={{m: '', s: ''}}
+          showSeparator
+        />
         <View style={styles.separatorVertical} key={Math.random()}>
           {
             editableBoard.map((row, rowIndex) => {
@@ -150,8 +160,31 @@ export default function Game({ route, navigation }) {
           }}><Text>😔</Text></View>}
           style={{ backgroundColor: 'white' }}
         >
-          <Text style={{ marginTop: -16, marginBottom: 32, fontSize:20 }}>Please try again</Text>
+          <Text style={{ marginTop: -16, marginBottom: 32, fontSize:20, alignContent:'center', justifyContent:'center' }}>Please try again</Text>
           <TouchableOpacity style={styles.btn} onPress={toggleAlert}>
+            <Text style={styles.btnText}>OK</Text>
+          </TouchableOpacity>
+        </FancyAlert>
+        <FancyAlert
+          visible={visibleFail}
+          icon={<View style={{
+            flex: 1,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'red',
+            borderRadius: 50,
+            width: '100%',
+          }}><Text>😔</Text></View>}
+          style={{ backgroundColor: 'white' }}
+        >
+          <Text style={{ marginTop: -16, marginBottom: 32, fontSize:20, alignContent:'center', justifyContent:'center' }}>Time's Up</Text>
+          <TouchableOpacity style={styles.btn} onPress={() => {
+            toggleAlertFail()
+            navigation.navigate('Finish', {
+              name
+            }     
+          )}}>
             <Text style={styles.btnText}>OK</Text>
           </TouchableOpacity>
         </FancyAlert>

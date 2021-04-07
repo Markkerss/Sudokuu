@@ -3,7 +3,7 @@ import { StyleSheet, TextInput, Text, View, TouchableOpacity } from 'react-nativ
 import { FancyAlert } from 'react-native-expo-fancy-alerts'
 
 export default function Home({navigation}) {
-  const [name, setName] = useState('John Smith')
+  const [name, setName] = useState('')
   const [difficulty, setDifficulty] = useState('easy')
   const [visible, setVisible] = useState(false)
 
@@ -120,5 +120,22 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     paddingTop: 10,
     paddingBottom: 10
+  },
+  btn: {
+    borderRadius: 32,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    alignSelf: 'stretch',
+    backgroundColor: '#4CB748',
+    marginTop: 16,
+    minWidth: '50%',
+    marginBottom: 5
+  },
+  btnText: {
+    color: '#FFFFFF',
   }
 })
