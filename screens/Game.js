@@ -3,7 +3,7 @@ import { StyleSheet, TextInput, Text, View, Dimensions, TouchableOpacity } from 
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { FancyAlert } from 'react-native-expo-fancy-alerts'
-import {setQuestionBoardAsync} from '../store/setBoard'
+import {setQuestionBoard} from '../store/setBoard'
 
 export default function Game({ route, navigation }) {
   const [editableBoard, setEditableBoard] = useState([])
@@ -22,11 +22,11 @@ export default function Game({ route, navigation }) {
       .get(`https://sugoku.herokuapp.com/board?difficulty=${difficulty}`)
       .then(data => {
         setEditableBoard(data.data.board)
+        dispatch(setQuestionBoard(data.data.board))
       })
       .catch(err => {
         console.log(err)
       })
-    dispatch(setQuestionBoardAsync(difficulty))
   }, [])
 
   function onChangeText(text, rowIndex, colIndex) {
