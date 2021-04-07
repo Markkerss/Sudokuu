@@ -99,7 +99,7 @@ export default function Game({ route, navigation }) {
                   {
                     row.map((col, colIndex) => {
                       return (
-                        <View style={{...styles.grid, backgroundColor: (col === 0) ? 'white' : 'powderblue'}} key={rowIndex+ '' + colIndex}>
+                        <View style={{...styles.grid, backgroundColor: (questionBoard[rowIndex] && questionBoard[rowIndex][colIndex] === 0) ? 'white' : 'powderblue'}} key={rowIndex+ '' + colIndex}>
                           <TextInput 
                             editable={questionBoard[rowIndex] && questionBoard[rowIndex][colIndex] === 0}
                             textAlign='center'
